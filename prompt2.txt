@@ -1,0 +1,73 @@
+# Fix User Data Loading Issues + Add Full Header Navigation to Donr App  
+You are an expert React Native + Firebase + Full-Stack developer.  
+Please fix data-loading issues AND build a new universal header with navigation links.
+
+---
+
+## 🧩 Problem Summary
+
+### ❗ 1. User data is still not loading correctly
+Even after previous fixes, important user fields do NOT reliably appear in the UI:
+
+- name is missing or blank  
+- role is missing or undefined  
+- Firestore user profile sometimes doesn’t load  
+- Home screen and Profile screen display empty values  
+- Data only appears after a manual refresh or not at all  
+
+This means:
+- The Auth context is not syncing correctly with Firestore  
+- The listeners are not real-time  
+- The app might be reading user data before it exists  
+- UI screens are not subscribed correctly to context updates  
+
+---
+
+### ❗ 2. Need a full header at the top of the app  
+This header must appear on ALL main pages (except login/signup).
+
+The header should include navigation links to:
+
+- **Map**
+  - (Donators → donate location map)
+  - (Food seekers → nearby food centers)
+  - (Food banks → distribution requests map)
+- **How It Works**
+- **FAQ**
+- **Resources**
+- **Dashboard**
+- **Login / Signup** (if logged out)
+- **Logout** (if logged in)
+
+The header must:
+- Respond to user role  
+- Work with React Navigation  
+- Have a clean, responsive design  
+- Highlight the active page  
+- Always stay at the top  
+
+---
+
+## 🎯 Goals
+
+### ✅ 1. Fix ALL user data loading inconsistencies
+Implement the following:
+
+- Use a realtime Firestore listener:
+  ```ts
+  onSnapshot(doc(db, "users", uid))
+Ensure user data is stored in global context
+
+Ensure user data loads AFTER Firebase Auth initializes
+
+Ensure screens never show undefined values
+
+Remove any duplicate or conflicting fetch calls
+
+{
+  "uid": "<user_id>",
+  "email": "<email>",
+  "name": "<full_name>",
+  "role": "donator | finder | distributor",
+  "createdAt": "<timestamp>"
+}

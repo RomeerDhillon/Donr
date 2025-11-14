@@ -1,0 +1,134 @@
+You are an expert full-stack developer building a cross-platform mobile app called **Donr**, designed to reduce food waste and hunger by connecting food donators, distributors (shelters/pantries), and acceptors (people in need). 
+
+Your goal: generate clean, modular, well-documented code in **React Native** (using TypeScript) with a **Node.js (Express)** backend and **Firebase** database. The system must prioritize security, scalability, and performance.
+
+---
+
+### 🌍 Core Concept
+**Donr** enables:
+- **Food Donators** (restaurants, groceries, individuals) to post available surplus food.  
+- **Food Distributors** (shelters, pantries) to claim, collect, and distribute donated food.  
+- **Food Acceptors** (individuals/families) to view available food from nearby distributors.
+
+The app must include:
+- Authentication (Firebase Auth)
+- Real-time geolocation mapping (Google Maps API)
+- Matching algorithm between Donators and Distributors
+- Notification system (Firebase Cloud Messaging)
+- Secure role-based access (Donator / Distributor / Acceptor)
+- Data validation and error handling
+- Responsive, simple UI design for all literacy levels
+
+---
+
+### 🧩 Architecture Requirements
+
+**Frontend (React Native with TypeScript)**
+1. Use **Expo** for simplified deployment and cross-platform development.
+2. Pages required:
+   - `LoginScreen.tsx` / `RegisterScreen.tsx`
+   - `HomeScreen.tsx` (role-based dashboard)
+   - `DonationForm.tsx` (Donator)
+   - `DonationList.tsx` (Distributor)
+   - `FoodMap.tsx` (shared between roles, integrated with Google Maps API)
+   - `ProfileScreen.tsx`
+3. Implement reusable components: `FoodCard`, `RoleSelector`, `NavBar`, `Loader`.
+4. Style with **Tailwind for React Native** or `StyleSheet.create()`.
+5. Follow accessibility best practices (high contrast, large touch targets).
+
+**Backend (Node.js + Express + Firebase)**
+1. Implement Firebase for authentication, Firestore for data storage, and Cloud Functions for automation.
+2. API Endpoints:
+   - `POST /donations` → Create new donation (Donator)
+   - `GET /donations` → Get nearby donations (Distributor/Acceptor)
+   - `PUT /donations/:id/claim` → Claim donation (Distributor)
+   - `POST /notifications/send` → Push alert to matched users
+3. Integrate Google Maps Geocoding API for address → lat/lng and vice versa.
+4. Use middleware for:
+   - Authentication verification (check Firebase tokens)
+   - Role-based access control
+   - Error handling (graceful JSON responses)
+5. Include CORS configuration for React Native frontend.
+
+---
+
+### ⚙️ Data Models (Firestore)
+
+**Users Collection**
+{
+id: string,
+name: string,
+email: string,
+role: "donator" | "distributor" | "acceptor",
+location: { lat: number, lng: number },
+createdAt: Timestamp
+}
+
+
+**Donations Collection**
+{
+id: string,
+donatorId: string,
+distributorId?: string,
+foodType: string,
+quantity: string,
+expirationDate: Timestamp,
+status: "available" | "claimed" | "distributed",
+location: { lat: number, lng: number },
+createdAt: Timestamp
+}
+
+
+---
+
+### 🔄 Matching Algorithm
+- When a donator posts a new donation, trigger a **Cloud Function**:
+  1. Retrieve active distributors within a configurable radius (e.g., 10 miles).
+  2. Prioritize matches by proximity and food type compatibility.
+  3. Notify matching distributors with an accept/decline option.
+- Once claimed, the donation status changes to “claimed,” and distribution is logged.
+
+---
+
+### 🔔 Notifications
+Use Firebase Cloud Messaging (FCM):
+- Notify distributors of new donations nearby.
+- Notify acceptors when new food is available in their area.
+- Notify donators when their food is successfully distributed.
+
+---
+
+### 🚫 Pitfalls to Avoid
+- ❌ Don’t hardcode API keys — use `.env` variables.  
+- ❌ Don’t allow unauthenticated API access — validate Firebase tokens.  
+- ❌ Don’t allow expired food entries — validate `expirationDate`.  
+- ❌ Don’t allow unverified role access — enforce role-based middleware.  
+- ❌ Don’t assume location permission — prompt users gracefully and handle denials.  
+- ❌ Don’t store sensitive data (e.g., addresses) without encryption.
+
+---
+
+### ✅ Implementation Best Practices
+- Use **ESLint + Prettier** for code consistency.  
+- Write **JSDoc/TypeDoc** comments for all major functions.  
+- Use **async/await** and try/catch for all async operations.  
+- Modularize backend routes, controllers, and services for scalability.  
+- Include **loading states** and **error feedback** in UI components.  
+- Follow **MVC structure** for backend and **component-based architecture** for frontend.
+
+---
+
+### 🚀 Bonus Features (Optional Future Work)
+- Add a “Volunteer” role for pickup coordination.
+- Add AI-powered food prediction to forecast demand and reduce waste.
+- Add impact metrics (e.g., CO₂ saved, meals served).
+- Add multilingual support (English/Spanish).
+
+---
+
+Now, generate the full, modular React Native frontend and Node.js backend code structure for **Donr**, ensuring:
+- Clean separation of concerns
+- Full CRUD functionality for donations
+- Secure authentication and role-based access
+- Real-time notifications and geolocation
+- Mobile responsiveness and accessibility

@@ -1,0 +1,123 @@
+# Create Map Feature for Donr App  
+You are an expert React Native + Firebase + Google Maps developer.  
+Please implement a full **Map feature** for the Donr app with the following requirements.
+
+---
+
+## 🧩 Requirements
+
+### 1. Role-Specific Views
+- **Donator**: sees nearby food banks & pantries, can donate food at a selected location  
+- **Food Seeker**: sees nearby distribution centers, can request help  
+- **Food Bank / Distributor**: sees incoming donation posts from donors, can accept or reject requests  
+
+---
+
+### 2. Data Sources (Firestore)
+#### Food Centers
+- Collection: `centers`
+- Fields: `name`, `address`, `lat`, `lng`, `hours`, `centerType`, `phone`, `capacity`, `createdAt`
+
+#### Donations
+- Collection: `donations`
+- Fields: `donorId`, `donorName`, `foodType`, `quantity`, `address`, `lat`, `lng`, `status`, `createdAt`
+
+#### Food Requests
+- Collection: `requests`
+- Fields: `userId`, `foodType`, `urgency`, `lat`, `lng`, `createdAt`
+
+---
+
+### 3. Map Implementation
+- Use **Google Maps SDK** (React Native)  
+- Show **user location**  
+- Show **markers** for:
+  - Centers (blue/green)  
+  - Donation posts (red)  
+  - Food requests (orange)  
+- Tapping a marker opens a **bottom sheet** with details and actions:  
+  - Donator → Donate Here  
+  - Food Seeker → Request Food / Get Directions  
+  - Food Bank → Accept / Reject Donations  
+
+---
+
+### 4. Firestore Realtime
+- Use `onSnapshot` to fetch collections in **realtime**  
+- Markers update automatically when Firestore data changes  
+- Only show markers relevant to the user’s role  
+
+---
+
+### 5. Directions / Navigation
+- Include a button in the bottom sheet: **“Get Directions”**  
+- Open Google Maps with coordinates:  
+```ts
+Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`);
+6. Filters
+
+Allow filtering by:
+
+Open now
+
+Nearby (within X km)
+
+Center type (food bank, pantry, shelter)
+
+Filters must respect the role:
+
+Donator → only food centers
+
+Seeker → only distribution centers
+
+Distributor → only donations / requests
+
+7. UI / UX
+
+Full-screen map
+
+Sticky header/navigation optional
+
+Bottom sheet or modal for marker info
+
+Responsive design for mobile devices
+
+Marker clustering for performance if many locations
+
+8. Security / Rules
+
+Donators → read centers, write donations
+
+Seekers → read centers, write requests
+
+Distributors → read donations, update status
+
+Admin → full access
+
+Use Firestore rules to enforce access
+
+9. Files to Create / Modify
+
+MapScreen.tsx → main screen
+
+/components/MapMarkerBottomSheet.tsx → bottom sheet for marker info
+
+Firebase functions / hooks as needed for Firestore queries
+
+Update navigation to include the map screen
+
+10. Acceptance Criteria
+
+Map shows correct markers for each role
+
+Marker info displays relevant details in bottom sheet
+
+Realtime Firestore updates are reflected immediately
+
+Directions button opens Google Maps
+
+Filters work correctly
+
+UI is clean, functional, and mobile-responsive
+
+Firestore security rules are applied
